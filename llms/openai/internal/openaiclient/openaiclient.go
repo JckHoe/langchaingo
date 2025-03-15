@@ -80,7 +80,8 @@ func New(token string, model string, baseURL string, organization string,
 
 // Completion is a completion.
 type Completion struct {
-	Text string `json:"text"`
+	Text  string    `json:"text"`
+	Usage ChatUsage `json:"usage,omitempty"`
 }
 
 // CreateCompletion creates a completion.
@@ -93,7 +94,8 @@ func (c *Client) CreateCompletion(ctx context.Context, r *CompletionRequest) (*C
 		return nil, ErrEmptyResponse
 	}
 	return &Completion{
-		Text: resp.Choices[0].Message.Content,
+		Text:  resp.Choices[0].Message.Content,
+		Usage: resp.Usage,
 	}, nil
 }
 
