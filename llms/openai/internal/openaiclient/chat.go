@@ -438,7 +438,7 @@ func (c *Client) createChat(ctx context.Context, payload *ChatRequest) (*ChatCom
 	err = json.Unmarshal(responseByte, &response)
 
 	if len(response.Choices) == 0 {
-		return nil, fmt.Errorf("Error Response : %s", string(responseByte))
+		return nil, fmt.Errorf("Error Response : %s", strings.TrimSpace(string(responseByte)))
 	}
 	return &response, err
 }
