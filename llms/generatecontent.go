@@ -118,10 +118,18 @@ type ToolCallResponse struct {
 
 func (ToolCallResponse) isPart() {}
 
+// Usage of tokens
+type ChatUsage struct {
+	PromptTokens     int `json:"prompt_tokens"`
+	CompletionTokens int `json:"completion_tokens"`
+	TotalTokens      int `json:"total_tokens"`
+}
+
 // ContentResponse is the response returned by a GenerateContent call.
 // It can potentially return multiple content choices.
 type ContentResponse struct {
 	Choices []*ContentChoice
+	Usage   ChatUsage `json:"usage,omitempty"`
 }
 
 // ContentChoice is one of the response choices returned by GenerateContent
