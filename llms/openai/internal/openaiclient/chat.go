@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -430,7 +431,16 @@ func (c *Client) createChat(ctx context.Context, payload *ChatRequest) (*ChatCom
 	}
 	// Parse response
 	var response ChatCompletionResponse
-	return &response, json.NewDecoder(r.Body).Decode(&response)
+	responseByte, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(responseByte, &response)
+
+	if len(response.Choices) == 0 {
+		return nil, fmt.Errorf("Error Response : %s", string(responseByte))
+	}
+	return &response, err
 }
 
 func parseStreamingChatResponse(ctx context.Context, r *http.Response, payload *ChatRequest) (*ChatCompletionResponse,
